@@ -6,6 +6,9 @@
     "build": "vite build",
     "serve": "vite preview"
   },
+  "dependencies": {
+    "axios": "^0.21.1"
+  },
   "devDependencies": {
     "vite": "^2.2.3"
   }

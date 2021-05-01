@@ -12,3 +12,14 @@
   margin-top: 2rem;
   // background: blue;
 }
+
+#login-error-msg,
+#register-error-msg-username,
+#register-error-msg-password {
+  display: none;
+}
+
+input {
+  width: 200px;
+  border-radius: 1rem;
+}

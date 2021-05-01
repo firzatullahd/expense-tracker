@@ -36,13 +36,12 @@ async function handleLogin(e) {
     localStorage.setItem("username", username.value);
     loadDOM();
   } catch (error) {
-    handleErrorForm(document.querySelector('#login-error-msg'));
+    handleMsg(document.querySelector('#login-error-msg'));
   }
 }
 
-function handleErrorForm(dom) {
+function handleMsg(dom) {
   dom.style.display = "block";
-  dom.style.color = "red";
   setTimeout(() => {
     dom.style.display = "none";
   }, 5000);
@@ -55,7 +54,7 @@ async function handleRegister(e) {
   const passwordRegister = document.querySelector('#passwordRegister');
   const passwordRegisterRepeat = document.querySelector('#passwordRegisterRepeat');
   if (passwordRegister.value !== passwordRegisterRepeat.value) {
-    handleErrorForm(document.querySelector('#register-error-msg-password'));
+    handleMsg(document.querySelector('#register-error-msg-password'));
     return;
   }
 
@@ -71,10 +70,9 @@ async function handleRegister(e) {
         "password": passwordRegister.value
       })
     });
-    alert("Registration success. Proceed to Login Page");
-    loadDOM()
+    handleMsg(document.querySelector('#success-msg'));
   } catch (error) {
-    handleErrorForm(document.querySelector('#register-error-msg-username'));
+    handleMsg(document.querySelector('#register-error-msg-username'));
   }
 }
 
@@ -86,18 +84,18 @@ function handleLogout() {
 
 function loadLoginDOM() {
   app.innerHTML = `
-    <h1>Expense Tracker</h1>
-    <h2>Login</h2>
-    <form>
-      <p id="login-error-msg">Invalid username and/or password</p>
-      <input type="text" name="username" id="username" placeholder="Username" />
-      <input type="password" name="password" id="password" placeholder="Password" />
-      <button id="submitLogin">Login</button>
-    </form>
-    <p>or</p>
-    <button id="registerPage">Create New Account</button>
-    
-  `
+    <div class="card">
+      <h2>Log in to Expense Tracker</h2>
+      <form>
+        <p id="login-error-msg"><i class="fa fa-times-circle"></i> Invalid username/password</p>
+        <input type="text" name="username" id="username" placeholder="Username" />
+        <input type="password" name="password" id="password" placeholder="Password" />
+        <button id="submitLogin">Log in</button>
+      </form>
+      <p>or</p>
+      <button id="registerPage">Create New Account</button>
+    </div>
+  `;
   const submitLogin = document.querySelector('#submitLogin');
   submitLogin.addEventListener('click', handleLogin);
 
@@ -109,18 +107,24 @@ function loadLoginDOM() {
 
 function loadRegisterDOM() {
   app.innerHTML = `
-  <h1>Expense Tracker</h1>
-  <h2>Register</h2>
-  <form>
-      <p id="register-error-msg-username">Username unavailable</p>
-      <p id="register-error-msg-password">Password mismatch</p>
-      <input type="text" name="usernameRegister" id="usernameRegister" placeholder="Username" />
-      <input type="password" name="passwordRegister" id="passwordRegister" placeholder="Password" />
-      <input type="password" name="passwordRegisterRepeat" id="passwordRegisterRepeat" placeholder="Confirm Password" />
-      <button id="submitRegister">Register</button>
-    </form>
-    <a id="loginPage">Back to Login Page</a>
-  `;
+  <div class="card">
+    <h2>Create a new account</h2>
+    <form>
+        <div id="success-msg"> <i class="fa fa-check"></i> Sign Up Success.</div>
+        <div id="register-error-msg-username"><i class="fa fa-times-circle"></i> Something went wrong</div>
+        <div id="register-error-msg-password"><i class="fa fa-times-circle"></i> Password mismatch</div>
+        <input type="text" name="usernameRegister" id="usernameRegister" placeholder="Username" />
+        <input type="password" name="passwordRegister" id="passwordRegister" placeholder="Password" />
+        <input type="password" name="passwordRegisterRepeat" id="passwordRegisterRepeat" placeholder="Confirm Password" />
+        <button id="submitRegister">Sign Up</button>
+      </form>
+      <a id="loginPage">Log in to an existing account</a>
+    </div>
+    `;
+  // <div class="modal">
+  //   <h2>hello</h2>
+  //   <h3>
+  // </div>
 
   const loginPage = document.querySelector('#loginPage');
   loginPage.addEventListener('click', loadLoginDOM);
@@ -138,24 +142,37 @@ function getBalance() {
 }
 
 async function loadLoggedInDOM() {
-
   app.innerHTML = `
-    <h1>Expense Tracker</h1>
-    <h2 id="hi-username"><h2>
-    <h3>Your Balance <span id="balance">Rp0,00</span></h3>
-    <button id="logout-btn">Logout</button>
-    <h3>History</h3>
-    <div id="transaction-list"></div>
-    <form>
-      <label for="text">Text/Expense Description</label>
-      <input type="text" name="text" id="text" placeholder="Enter text.." />
-      <br>
-      <label for="amount">Amount</label>
-      <span>(positive - income, negative - expense)</span>
-      <input type="number" name="amount" id="amount" placeholder="Enter amount.." />
-      <br>
-      <button id="submitAddTransaction">Add Transaction</button>
-    </form>
+    <div id="loggedIn">
+      <div id="profile">
+        <h2 id="hi-username"></h2>
+        <button id="logout-btn">Sign Out</button>
+      </div>
+      <h3>YOUR BALANCE</h3>
+      <h3 id="balance">Rp0,00</h3>
+      <div id="income-expense">
+        <div>
+          <h4>INCOME</h4>
+          <p id="money-plus" class="money plus">+$0.00</p>
+        </div>
+        <div>
+          <h4>EXPENSE</h4>
+          <p id="money-minus" class="money minus">-$0.00</p>
+      </div>
+      </div>
+      <h3 id="history">History</h3>
+      <div id="transaction-list"></div>
+      <form>
+        <label for="text">Text/Expense Description</label>
+        <input type="text" name="text" id="text" placeholder="Enter text.." />
+        <br>
+        <label for="amount">Amount</label>
+        <p>(positive-income, negative-expense)</p>
+        <input type="number" name="amount" id="amount" placeholder="Enter amount.." />
+        <br>
+        <button id="submitAddTransaction">Add Transaction</button>
+      </form>
+    <div>
   `
   const balance = getBalance();
   document.querySelector('#balance').innerHTML = `Rp ${balance},00`;
@@ -183,18 +200,15 @@ async function loadLoggedInDOM() {
 }
 
 function showTransaction(transaction) {
-
-  let amount = String(transaction.amount);
-  if (transaction.amount < 0) {
-    amount = `-Rp ${amount.substring(1)},00`;
-  } else {
-    amount = `+Rp ${amount},00`
-  }
+  const sign = transaction.amount < 0 ? '-' : '+';
+  let amount = sign + "Rp " + Math.abs(transaction.amount).toLocaleString("id-ID") + ",00";
   return `
-    <div id=${transaction._id}>
+    <div id=${transaction._id} class="transaction">
       <span>${transaction.text}</span>
-      <span>${amount}</span>
-      <button class="delete-btn">x<button>
+      <div>
+      <span class="transaction-amount">${amount} </span>
+      <button class="delete-btn">x</button>
+      </div>
     </div>
   `;
 }
@@ -231,12 +245,11 @@ async function addTransaction(text, amount) {
         'x-auth-token': localStorage.getItem('expense-tracker-token')
       }
     });
+    localStorage.setItem('transactions', JSON.stringify(res.data.data));
+    loadDOM();
   } catch (error) {
     console.log(error)
   }
-
-  localStorage.setItem('transactions', JSON.stringify(res.data.data));
-  loadDOM();
 }
 
 async function deleteTransactions(id) {

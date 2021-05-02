@@ -3,8 +3,6 @@ import axios from 'axios';
 import { formatCurrency } from '../utils';
 
 let transactionsData = [];
-const username = localStorage.getItem("username");
-const token = localStorage.getItem('expense-tracker-token');
 
 export async function ExpenseTracker() {
     app.innerHTML = `
@@ -41,7 +39,7 @@ export async function ExpenseTracker() {
     `
     document.querySelector('#logout-btn').addEventListener('click', handleLogout);
     document.querySelector('#submitAddTransaction').addEventListener('click', addTransaction);
-    document.querySelector('#hi-username').innerHTML = "Hi, " + username;
+    document.querySelector('#hi-username').innerHTML = "Hi, " + localStorage.getItem("username");
     init();
 }
 
@@ -130,7 +128,7 @@ async function addTransaction(e) {
         }, {
             headers: {
                 'Content-Type': 'application/json',
-                'x-auth-token': token
+                'x-auth-token': localStorage.getItem('expense-tracker-token')
             }
         });
         init();
@@ -145,7 +143,7 @@ async function getTransactions() {
         method: 'get',
         url: 'https://fir-expense-tracker-api.herokuapp.com/api/transactions',
         headers: {
-            'x-auth-token': token
+            'x-auth-token': localStorage.getItem('expense-tracker-token')
         }
     });
     transactionsData = res.data.data;
@@ -158,7 +156,7 @@ async function deleteTransaction(id) {
             method: 'delete',
             url: `https://fir-expense-tracker-api.herokuapp.com/api/transactions/${id}`,
             headers: {
-                'x-auth-token': token
+                'x-auth-token': localStorage.getItem('expense-tracker-token')
             }
         });
 

@@ -6,8 +6,8 @@ Simple money tracker. It takes seconds to record daily transactions. Easily add 
 
 [Backend](https://github.com/firzatullahd/expense-tracker-api)
 
-![preview1](https://github.com/firzatullahd/expense-tracker/master/preview1.png)
-![preview2](https://github.com/firzatullahd/expense-tracker/master/preview2.png)
+![preview1](https://raw.githubusercontent.com/firzatullahd/expense-tracker/master/preview1.png)
+![preview2](https://raw.githubusercontent.com/firzatullahd/expense-tracker/master/preview2.png)
 
 This project was bootstrapped with [Vite Vanilla Javascript](https://vitejs.dev/guide/#community-templates).
 

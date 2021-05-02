@@ -38,6 +38,12 @@
     div:nth-child(1) {
       border-right: 1px solid rgba($color: #000000, $alpha: 0.1);
     }
+    p {
+      @media (min-width: 1000px) {
+        font-size: 1rem;
+      }
+      font-size: 0.8rem;
+    }
   }
   #transaction-list {
     display: flex;

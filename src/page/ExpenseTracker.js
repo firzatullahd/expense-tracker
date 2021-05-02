@@ -2,11 +2,9 @@ import { App } from '../main';
 import axios from 'axios';
 import { formatCurrency } from '../utils';
 
-let transactionsLocalStorage = JSON.parse(localStorage.getItem("transactions"));
-console.log(transactionsLocalStorage)
+let transactionsData = [];
 const username = localStorage.getItem("username");
 const token = localStorage.getItem('expense-tracker-token');
-//refactor into transactions & usrname
 
 export async function ExpenseTracker() {
     app.innerHTML = `
@@ -44,25 +42,24 @@ export async function ExpenseTracker() {
     document.querySelector('#logout-btn').addEventListener('click', handleLogout);
     document.querySelector('#submitAddTransaction').addEventListener('click', addTransaction);
     document.querySelector('#hi-username').innerHTML = "Hi, " + username;
+    init();
+}
 
-    updateValues();
-    // + reload
-    const transactionListDOM = document.querySelector('#transaction-list');
+async function init() {
     await getTransactions();
+    const transactionListDOM = document.querySelector('#transaction-list');
     transactionListDOM.innerHTML = '';
-    let transactionData = JSON.parse(localStorage.getItem('transactions'));
-    transactionData.forEach(t => addTransactionDOM(t));
-    //
+    transactionsData.forEach(t => addTransactionDOM(t));
+    updateValues()
 
     const deleteBtns = document.querySelectorAll('.delete-btn')
     deleteBtns.forEach(d => {
         d.addEventListener('click', () => {
+            // console.log(d.parentNode.parentNode.id);
             deleteTransaction(d.parentNode.parentNode.id);
         });
     });
-
 }
-
 
 function addTransactionDOM(transaction) {
     const sign = transaction.amount < 0 ? '-' : '+';
@@ -78,16 +75,16 @@ function addTransactionDOM(transaction) {
         <button class="delete-btn">x</button>
         </div>
     `;
+
+
     const transactionListDOM = document.querySelector('#transaction-list');
     transactionListDOM.appendChild(transactionItem);
-    console.log(transactionListDOM)
-
 }
 
 
 
 function getIncomeExpense() {
-    let res = transactionsLocalStorage;
+    let res = transactionsData;
     if (res.length == 0) return { income: 0, expense: 0 }
     else {
         res = res.map(t => t.amount);
@@ -105,9 +102,9 @@ function getIncomeExpense() {
 }
 
 function getBalance() {
-    if (transactionsLocalStorage.length == 0) return formatCurrency(0);
+    if (transactionsData.length == 0) return formatCurrency(0);
     else {
-        let balance = transactionsLocalStorage;
+        let balance = transactionsData;
         balance = balance.reduce((totalBalance, t) => {
             return totalBalance + Number(t.amount);
         }, 0);
@@ -120,7 +117,6 @@ function getBalance() {
 function handleLogout() {
     localStorage.removeItem("expense-tracker-token");
     localStorage.removeItem("username");
-    localStorage.removeItem("transactions");
     App();
 }
 
@@ -137,8 +133,7 @@ async function addTransaction(e) {
                 'x-auth-token': token
             }
         });
-        localStorage.setItem('transactions', JSON.stringify([...transactionsLocalStorage, res.data.data]));
-        ExpenseTracker();
+        init();
     } catch (error) {
         console.log(error)
     }
@@ -153,12 +148,11 @@ async function getTransactions() {
             'x-auth-token': token
         }
     });
-    localStorage.setItem('transactions', JSON.stringify(res.data.data));
-    console.log("get", transactionsLocalStorage)
-    // console.log("get", JSON.parse(localStorage.getItem("transactions")));
+    transactionsData = res.data.data;
 }
 
 async function deleteTransaction(id) {
+    console.log(id)
     try {
         await axios({
             method: 'delete',
@@ -168,9 +162,7 @@ async function deleteTransaction(id) {
             }
         });
 
-        let transactions = transactionsLocalStorage.filter(transaction => transaction._id !== id);
-        localStorage.setItem('transactions', JSON.stringify(transactions));
-
+        init();
     } catch (error) {
         console.log(error)
     }
@@ -182,3 +174,4 @@ function updateValues() {
     document.querySelector("#money-plus").innerHTML = "+ " + formatCurrency(income);
     document.querySelector("#money-minus").innerHTML = "-" + formatCurrency(expense);
 }
+

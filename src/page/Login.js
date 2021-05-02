@@ -41,7 +41,6 @@ async function handleLogin(e) {
 
         localStorage.setItem("expense-tracker-token", res.data.data);
         localStorage.setItem("username", username.value);
-        localStorage.setItem("transactions", JSON.stringify([]))
         App();
     } catch (error) {
         handleMsg(document.querySelector('#login-error-msg'));

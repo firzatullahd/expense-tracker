@@ -1,0 +1,20 @@
+#login-error-msg,
+#register-error-msg-username,
+#register-error-msg-password {
+  padding: 0.25rem;
+  margin-bottom: 0.25rem;
+  border-radius: 0.25rem;
+  color: #270;
+  color: #d8000c;
+  background-color: #ffbaba;
+  display: none;
+}
+
+#register-success-msg {
+  padding: 0.25rem;
+  color: #270;
+  background-color: #dff2bf;
+  margin-bottom: 0.25rem;
+  border-radius: 0.25rem;
+  display: none;
+}

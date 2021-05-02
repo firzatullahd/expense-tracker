@@ -1,0 +1,39 @@
+.card {
+  width: 75%;
+  @media (min-width: 1000px) {
+    width: 25%;
+  }
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  background: F7F7F7;
+  border-radius: 0.5rem;
+  box-shadow: 1px 1px 3px 1px rgba($color: #000000, $alpha: 0.1);
+  h2 {
+    font-size: 1rem;
+    margin: 1rem auto;
+    color: #1c1e82;
+  }
+  form {
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  button,
+  input,
+  p,
+  a {
+    margin: 0 auto 0.75rem;
+  }
+  #submitLogin {
+    background: #1877f2;
+    color: #fff;
+  }
+  #registerPage,
+  #submitRegister {
+    background: #42b72a;
+    color: #fff;
+  }
+}
